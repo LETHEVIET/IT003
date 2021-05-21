@@ -1,38 +1,11 @@
 #include <bits/stdc++.h>
-#define MAXN 2187+1
 using namespace std;
-int A[MAXN][MAXN];
-int F[MAXN][MAXN];
+int A[2187][2187];
 int res[3];
-
-int getSum(int a, int b, int u, int v){
-    return F[u][v] - F[u][b-1] - F[a-1][v] + F[a-1][b-1];
-}
-
+//kiem tra o vuong do co 
 bool check(int a, int b, int u, int v)
 {
-    int l = u-a+1;
-    if(a==u && b==v){
-        if (A[a][b] == 13) res[2]++;
-        else res[A[a][b]]++; 
-        return true;
-    }
-    if (A[a][b] == 0 && getSum(a,b,u,v) == 0){
-        res[0] ++;
-        return true;
-    }
-    if (A[a][b] == 1 && getSum(a,b,u,v) == l*l){
-        res[1] ++;
-        return true;
-    }
-    if (A[a][b] == 13 && getSum(a,b,u,v) == 13*l*l){
-        //cout<<"eyyy it here" ;
-        res[2] ++;
-        return true;
-    }
-    return false;
-    /*
-    if(a==u && b==v){
+    if(a==u && b==v){ 
         res[A[a][b]]++; 
         return true;
     }
@@ -41,28 +14,25 @@ bool check(int a, int b, int u, int v)
             if (A[i][j] != A[a][b]) return false;
 
     res[A[a][b]]++; 
-    */
     return true;
 }
 
 void print(int a, int b, int u, int v){
-    cout<< "---" <<endl;
     for (int i = a; i <= u; i ++){
         for (int j = b; j <= v; j++)
             cout << A[i][j] << " ";
         cout<< endl;
     }
-    cout<<getSum(a,b,u,v) << endl;
 }
 
-
+//xu ly o vuong tu (a,b) den (u,v)
 void process(int a, int b, int u, int v)
 {
     //print(a,b,u,v);
     if (check(a,b,u,v)) return ;
 
+    //chia nho o vuong ra 9 o vuong
     int l = (u-a+1)/3;
-    int res = 0;
     for (int i = 0; i < 3; i++){
         for (int j = 0; j < 3; j++){
             int x,y;
@@ -74,27 +44,14 @@ void process(int a, int b, int u, int v)
 }
 
 int main(){
+    ios_base::sync_with_stdio(0); // insert
+    cin.tie(0);
     int n;
     cin >> n;
-    for (int i = 1; i <= n; i++)
-        for (int j = 1; j <= n; j++){
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
             cin >> A[i][j];
-            if (A[i][j] == 2) A[i][j] = 13;
-        }
-
-    for (int i = 1; i <= n; i++)
-        for (int j = 1; j <= n; j++){
-            F[i][j] = F[i-1][j] + F[i][j-1] - F[i-1][j-1] + A[i][j];
-        }   
-    /*
-    cout<<"----";
-    for (int i = 1; i <= n; i ++){
-        for (int j = 1; j <= n; j++)
-            cout << F[i][j] << " ";
-        cout<< endl;
-    }
-    */
-    process(1,1,n,n);
+    process(0,0,n-1,n-1);
     cout<< res[0] << endl << res[1] << endl << res[2];
     return 0;
 }
